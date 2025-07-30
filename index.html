@@ -15,45 +15,46 @@
         body { font-family: 'Inter', sans-serif; }
         .transition-all { transition: all 0.3s ease-in-out; }
         select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        .hidden { display: none; }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border-left-color: #fff;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-red-100 to-blue-200 min-h-screen flex items-center justify-center p-4">
 
-    <!-- Iframe tersembunyi untuk menangani pengiriman form di latar belakang -->
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
+    <!-- Kartu Absensi -->
     <div id="attendance-card" class="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8 space-y-6 transition-all">
         <div class="flex justify-center mb-4">
             <img src="https://raw.githubusercontent.com/Bukhori1/Aps/refs/heads/main/BackgroundEraser_20250715_125113431.jpg" alt="Header Ayam Penyet Surabaya" class="w-full h-48 object-cover rounded-xl shadow-lg">
         </div>
-
         <div class="text-center">
             <h1 class="text-3xl font-bold text-gray-800">Form Absensi Karyawan</h1>
             <p class="text-gray-500 mt-2">Silakan isi data kehadiran Anda hari ini.</p>
         </div>
         
-        <form id="attendance-form" 
-              action="https://docs.google.com/forms/d/e/1FAIpQLSeHSVycU8m8R6Wgh5T_k4E_20N3MX-wFWHouz0O_zYww0B73Q/formResponse" 
-              method="POST" 
-              target="hidden_iframe"
-              class="space-y-6">
-            
-            <!-- Input Tanggal & Waktu (Otomatis) -->
+        <form id="attendance-form" class="space-y-6">
             <div>
                 <label for="datetime" class="block text-sm font-medium text-gray-700 mb-2">Tanggal & Waktu</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph ph-calendar text-gray-400"></i></div>
-                    <!-- PENTING: Tambahkan pertanyaan "Tanggal & Waktu" di Google Form Anda, lalu ganti 'entry.xxxxxxxxxx' ini dengan ID entri yang benar -->
-                    <input type="text" id="datetime" name="entry.xxxxxxxxxx" readonly class="w-full pl-10 pr-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:outline-none text-gray-600">
+                    <input type="text" id="datetime" name="timestamp" readonly class="w-full pl-10 pr-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:outline-none text-gray-600">
                 </div>
             </div>
-
-            <!-- Input Nama Karyawan -->
             <div>
                 <label for="employee-name" class="block text-sm font-medium text-gray-700 mb-2">Nama Karyawan <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph ph-user text-gray-400"></i></div>
-                    <select id="employee-name" name="entry.1161063185" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <select id="employee-name" name="nama_karyawan" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="" disabled selected>Pilih nama Anda</option>
                         <option value="Aulia">Aulia</option>
                         <option value="Algim">Algim</option>
@@ -81,13 +82,11 @@
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"><i class="ph ph-caret-down text-gray-400"></i></div>
                 </div>
             </div>
-
-            <!-- Input Stand/Bagian -->
             <div>
                 <label for="department" class="block text-sm font-medium text-gray-700 mb-2">Stand / Bagian <span class="text-red-500">*</span></label>
                  <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph ph-storefront text-gray-400"></i></div>
-                    <select id="department" name="entry.283067072" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <select id="department" name="bagian" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="" disabled selected>Pilih bagian kerja</option>
                         <option value="Kasir">Kasir</option>
                         <option value="Cs/Delivery">Cs/Delivery</option>
@@ -100,13 +99,11 @@
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"><i class="ph ph-caret-down text-gray-400"></i></div>
                 </div>
             </div>
-
-            <!-- Input Shift Kerja -->
             <div>
                 <label for="shift" class="block text-sm font-medium text-gray-700 mb-2">Shift Kerja <span class="text-red-500">*</span></label>
                 <div class="relative">
                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph ph-clock text-gray-400"></i></div>
-                    <select id="shift" name="entry.957404035" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <select id="shift" name="shift" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="" disabled selected>Pilih shift Anda</option>
                         <option value="Shift Pagi">Shift Pagi</option>
                         <option value="Shift Siang">Shift Siang</option>
@@ -115,13 +112,11 @@
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"><i class="ph ph-caret-down text-gray-400"></i></div>
                 </div>
             </div>
-
-            <!-- Input Keterangan -->
             <div>
                 <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Keterangan <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph ph-info text-gray-400"></i></div>
-                    <select id="status" name="entry.1002601549" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <select id="status" name="keterangan" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="" disabled selected>Pilih keterangan kehadiran</option>
                         <option value="H">H (Hadir)</option>
                         <option value="I">I (Izin)</option>
@@ -131,88 +126,150 @@
                      <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"><i class="ph ph-caret-down text-gray-400"></i></div>
                 </div>
             </div>
-            
-            <div id="error-message" class="hidden text-sm text-center text-red-600 bg-red-100 p-3 rounded-lg">Harap lengkapi semua kolom yang wajib diisi.</div>
-
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <div id="error-message" class="hidden text-sm text-center text-red-600 bg-red-100 p-3 rounded-lg"></div>
             <div class="flex flex-col sm:flex-row gap-4 pt-4">
                 <button type="button" id="reset-button" class="w-full px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400">Kosongkan Form</button>
-                <button type="submit" class="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-lg hover:shadow-blue-500/50">Kirim Absen</button>
+                <button type="submit" id="submit-button" class="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-lg hover:shadow-blue-500/50 flex items-center justify-center gap-2">
+                    <span id="submit-text">Kirim Absen</span>
+                    <div id="submit-spinner" class="spinner hidden"></div>
+                </button>
             </div>
         </form>
     </div>
 
+    <!-- Kartu Sukses -->
     <div id="success-card" class="hidden w-full max-w-lg bg-white rounded-2xl shadow-xl p-8 text-center transition-all">
         <div class="flex justify-center mb-4"><img src="https://raw.githubusercontent.com/Bukhori1/Aps/refs/heads/main/BackgroundEraser_20250715_125113431.jpg" alt="Header Ayam Penyet Surabaya" class="w-full h-48 object-cover rounded-xl shadow-lg"></div>
         <h2 class="text-2xl font-bold text-gray-800 mt-6">Daftar Hadir Terkirim!</h2>
-        <p class="text-gray-600 mt-2 mb-6">Terima kasih, <span id="success-name" class="font-semibold"></span>. Untuk menyelesaikan, silakan klik link berikut dan aktifkan lokasi Anda.</p>
-        <a href="https://script.google.com/macros/s/AKfycbyU4LYIEgl02nDLJQ1hJSAdxL8JMzVXHUy4agFItNYnN3DoDtGwERBSgLMln602-8XZpw/exec" target="_blank" class="inline-block w-full px-6 py-4 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all shadow-lg hover:shadow-green-500/50 text-lg"><i class="ph-fill ph-map-pin-line align-middle mr-2"></i>Aktifkan Lokasi Sekarang</a>
-        <button id="back-button" class="mt-4 w-full text-sm text-gray-600 hover:text-blue-600 hover:underline">Isi Absen untuk Karyawan Lain</button>
+        <p class="text-gray-600 mt-2 mb-6">Terima kasih, <span id="success-name" class="font-semibold"></span>. Lokasi Anda telah berhasil direkam.</p>
+        <button id="back-button" class="mt-4 w-full text-sm text-blue-600 hover:underline">Isi Absen untuk Karyawan Lain</button>
     </div>
 
     <script>
-        const attendanceForm = document.getElementById('attendance-form');
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys9vlpg9DDHX5wI3BISwHRXvnGud-Ae27hswSwGwM7KIjRkbs61DV8rwhOzYteIpjb/exec";
+
+        // --- Elemen DOM ---
         const attendanceCard = document.getElementById('attendance-card');
         const successCard = document.getElementById('success-card');
+        const attendanceForm = document.getElementById('attendance-form');
+        const attendanceErrorMessage = document.getElementById('error-message');
         const successName = document.getElementById('success-name');
-        const errorMessage = document.getElementById('error-message');
         const resetButton = document.getElementById('reset-button');
         const backButton = document.getElementById('back-button');
+        const submitButton = document.getElementById('submit-button');
+        const submitText = document.getElementById('submit-text');
+        const submitSpinner = document.getElementById('submit-spinner');
         const requiredInputs = attendanceForm.querySelectorAll('[required]');
 
+        // --- Fungsi ---
         function setCurrentDateTime() {
             const datetimeInput = document.getElementById('datetime');
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-            datetimeInput.value = now.toLocaleDateString('id-ID', options).replace('pukul', ',');
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            datetimeInput.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
 
-        attendanceForm.addEventListener('submit', function(event) {
-            let isFormValid = true;
+        function validateForm() {
+            let isValid = true;
+            attendanceErrorMessage.classList.add('hidden');
             requiredInputs.forEach(input => {
                 input.classList.remove('border-red-500', 'ring-red-500');
                 if (!input.value) {
-                    isFormValid = false;
+                    isValid = false;
                     input.classList.add('border-red-500', 'ring-1', 'ring-red-500');
                 }
             });
+            if (!isValid) {
+                attendanceErrorMessage.textContent = 'Harap lengkapi semua kolom yang wajib diisi.';
+                attendanceErrorMessage.classList.remove('hidden');
+            }
+            return isValid;
+        }
 
-            if (isFormValid) {
-                errorMessage.classList.add('hidden');
-                const employeeName = document.getElementById('employee-name').value;
-                successName.textContent = employeeName;
+        function getLocation() {
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    reject(new Error('Geolocation tidak didukung oleh browser ini.'));
+                    return;
+                }
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // PERBAIKAN: Menggunakan toFixed(6) untuk memastikan 6 angka desimal
+                        document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
+                        document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
+                        resolve();
+                    },
+                    (error) => {
+                        let msg = '';
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED: msg = "Anda harus mengizinkan akses lokasi untuk absen."; break;
+                            case error.POSITION_UNAVAILABLE: msg = "Informasi lokasi tidak tersedia."; break;
+                            case error.TIMEOUT: msg = "Waktu permintaan lokasi habis."; break;
+                            default: msg = "Terjadi kesalahan saat mengambil lokasi."; break;
+                        }
+                        reject(new Error(msg));
+                    }
+                );
+            });
+        }
 
-                setTimeout(() => {
+        // --- Event Listeners ---
+        attendanceForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            if (!validateForm()) return;
+
+            submitButton.disabled = true;
+            submitText.classList.add('hidden');
+            submitSpinner.classList.remove('hidden');
+            attendanceErrorMessage.classList.add('hidden');
+
+            try {
+                await getLocation();
+                const formData = new FormData(attendanceForm);
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+                const data = await response.json();
+
+                if (data.result === 'success') {
+                    successName.textContent = formData.get('nama_karyawan');
                     attendanceCard.classList.add('hidden');
                     successCard.classList.remove('hidden');
-                }, 1000); 
-            } else {
-                event.preventDefault();
-                errorMessage.classList.remove('hidden');
+                } else {
+                    throw new Error(data.message || 'Gagal mengirim data.');
+                }
+            } catch (error) {
+                attendanceErrorMessage.textContent = error.message;
+                attendanceErrorMessage.classList.remove('hidden');
+            } finally {
+                submitButton.disabled = false;
+                submitText.classList.remove('hidden');
+                submitSpinner.classList.add('hidden');
             }
         });
-        
-        resetButton.addEventListener('click', function() {
+
+        resetButton.addEventListener('click', () => {
             attendanceForm.reset();
             setCurrentDateTime();
-            errorMessage.classList.add('hidden');
+            attendanceErrorMessage.classList.add('hidden');
             requiredInputs.forEach(input => {
                 input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
             });
         });
 
         backButton.addEventListener('click', function() {
-            attendanceForm.reset();
-            setCurrentDateTime();
             successCard.classList.add('hidden');
             attendanceCard.classList.remove('hidden');
-            requiredInputs.forEach(input => {
-                input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
+            attendanceForm.reset();
             setCurrentDateTime();
         });
+
+        document.addEventListener('DOMContentLoaded', setCurrentDateTime);
     </script>
 
 </body>
