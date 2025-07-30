@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Form Absensi Karyawan</title>
+    <title>Form Absensi Karyawan</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +15,6 @@
         body { font-family: 'Inter', sans-serif; }
         .transition-all { transition: all 0.3s ease-in-out; }
         select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
-        .hidden { display: none; }
     </style>
 </head>
 <body class="bg-gradient-to-br from-red-100 to-blue-200 min-h-screen flex items-center justify-center p-4">
@@ -23,37 +22,7 @@
     <!-- Iframe tersembunyi untuk menangani pengiriman form di latar belakang -->
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
-    <!-- Kartu Login -->
-    <div id="login-card" class="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8 space-y-6 transition-all">
-        <div class="flex justify-center mb-4">
-            <img src="https://raw.githubusercontent.com/Bukhori1/Aps/refs/heads/main/BackgroundEraser_20250715_125113431.jpg" alt="Header Ayam Penyet Surabaya" class="w-full h-48 object-cover rounded-xl shadow-lg">
-        </div>
-        <div class="text-center">
-            <h1 class="text-3xl font-bold text-gray-800">Selamat Datang</h1>
-            <p class="text-gray-500 mt-2">Silakan login untuk mengakses form absensi.</p>
-        </div>
-        <form id="login-form" class="space-y-6">
-            <div>
-                <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph ph-user text-gray-400"></i></div>
-                    <input type="text" id="username" name="username" required class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Masukkan username">
-                </div>
-            </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph ph-lock text-gray-400"></i></div>
-                    <input type="password" id="password" name="password" required class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Masukkan password">
-                </div>
-            </div>
-            <div id="login-error-message" class="hidden text-sm text-center text-red-600 bg-red-100 p-3 rounded-lg">Username atau password salah.</div>
-            <button type="submit" class="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-lg hover:shadow-blue-500/50">Login</button>
-        </form>
-    </div>
-
-    <!-- Kartu Absensi (Awalnya Tersembunyi) -->
-    <div id="attendance-card" class="hidden w-full max-w-lg bg-white rounded-2xl shadow-xl p-8 space-y-6 transition-all">
+    <div id="attendance-card" class="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8 space-y-6 transition-all">
         <div class="flex justify-center mb-4">
             <img src="https://raw.githubusercontent.com/Bukhori1/Aps/refs/heads/main/BackgroundEraser_20250715_125113431.jpg" alt="Header Ayam Penyet Surabaya" class="w-full h-48 object-cover rounded-xl shadow-lg">
         </div>
@@ -74,7 +43,7 @@
                 <label for="datetime" class="block text-sm font-medium text-gray-700 mb-2">Tanggal & Waktu</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph ph-calendar text-gray-400"></i></div>
-                    <!-- PENTING: Anda harus mengganti 'entry.xxxxxxxxxx' dengan ID entri yang benar dari Google Form Anda untuk field Tanggal & Waktu -->
+                    <!-- PENTING: Tambahkan pertanyaan "Tanggal & Waktu" di Google Form Anda, lalu ganti 'entry.xxxxxxxxxx' ini dengan ID entri yang benar -->
                     <input type="text" id="datetime" name="entry.xxxxxxxxxx" readonly class="w-full pl-10 pr-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:outline-none text-gray-600">
                 </div>
             </div>
@@ -84,8 +53,8 @@
                 <label for="employee-name" class="block text-sm font-medium text-gray-700 mb-2">Nama Karyawan <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph ph-user text-gray-400"></i></div>
-                    <select id="employee-name" name="entry.1161063185" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-gray-200" readonly>
-                        <option value="" disabled>Pilih nama Anda</option>
+                    <select id="employee-name" name="entry.1161063185" required class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled selected>Pilih nama Anda</option>
                         <option value="Aulia">Aulia</option>
                         <option value="Algim">Algim</option>
                         <option value="Alpa">Alpa</option>
@@ -172,112 +141,32 @@
         </form>
     </div>
 
-    <!-- Kartu Sukses (Awalnya Tersembunyi) -->
     <div id="success-card" class="hidden w-full max-w-lg bg-white rounded-2xl shadow-xl p-8 text-center transition-all">
         <div class="flex justify-center mb-4"><img src="https://raw.githubusercontent.com/Bukhori1/Aps/refs/heads/main/BackgroundEraser_20250715_125113431.jpg" alt="Header Ayam Penyet Surabaya" class="w-full h-48 object-cover rounded-xl shadow-lg"></div>
         <h2 class="text-2xl font-bold text-gray-800 mt-6">Daftar Hadir Terkirim!</h2>
         <p class="text-gray-600 mt-2 mb-6">Terima kasih, <span id="success-name" class="font-semibold"></span>. Untuk menyelesaikan, silakan klik link berikut dan aktifkan lokasi Anda.</p>
         <a href="https://script.google.com/macros/s/AKfycbyU4LYIEgl02nDLJQ1hJSAdxL8JMzVXHUy4agFItNYnN3DoDtGwERBSgLMln602-8XZpw/exec" target="_blank" class="inline-block w-full px-6 py-4 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all shadow-lg hover:shadow-green-500/50 text-lg"><i class="ph-fill ph-map-pin-line align-middle mr-2"></i>Aktifkan Lokasi Sekarang</a>
-        <button id="logout-button" class="mt-4 w-full text-sm text-gray-600 hover:text-blue-600 hover:underline">Logout dan Kembali ke Halaman Login</button>
+        <button id="back-button" class="mt-4 w-full text-sm text-gray-600 hover:text-blue-600 hover:underline">Isi Absen untuk Karyawan Lain</button>
     </div>
 
     <script>
-        // --- Elemen DOM ---
-        const loginCard = document.getElementById('login-card');
+        const attendanceForm = document.getElementById('attendance-form');
         const attendanceCard = document.getElementById('attendance-card');
         const successCard = document.getElementById('success-card');
-        
-        const loginForm = document.getElementById('login-form');
-        const attendanceForm = document.getElementById('attendance-form');
-
-        const loginErrorMessage = document.getElementById('login-error-message');
-        const attendanceErrorMessage = document.getElementById('error-message');
-
         const successName = document.getElementById('success-name');
+        const errorMessage = document.getElementById('error-message');
         const resetButton = document.getElementById('reset-button');
-        const logoutButton = document.getElementById('logout-button');
-        
+        const backButton = document.getElementById('back-button');
         const requiredInputs = attendanceForm.querySelectorAll('[required]');
-        const employeeNameSelect = document.getElementById('employee-name');
 
-        // --- Kredensial Login untuk Setiap Karyawan (DIPERBARUI) ---
-        const employeeCredentials = {
-            "aulia": { password: "17558", name: "Aulia" },
-            "citra": { password: "23740", name: "Citra" },
-            "wulan": { password: "33559", name: "Wulan" },
-            "sumi": { password: "49061", name: "Sumi" },
-            "algim": { password: "51822", name: "Algim" },
-            "alwi": { password: "65570", name: "Alwi" },
-            "nirvana": { password: "78801", name: "Nirvana" },
-            "eep": { password: "87873", name: "Eep" },
-            "tiara": { password: "99867", name: "Tiara" },
-            "rini": { password: "107814", name: "Rini" },
-            "resti": { password: "114368", name: "Resti" },
-            "lulus": { password: "121420", name: "Lulus" },
-            "wafid": { password: "137698", name: "Wafid" },
-            "riki": { password: "141392", name: "Riki" },
-            "robi": { password: "152394", name: "Robi" },
-            "hanif": { password: "164188", name: "Hanif" },
-            "andan": { password: "175132", name: "Andan" },
-            "alpa": { password: "189589", name: "Alpa" },
-            "yogi": { password: "194089", name: "Yogi" },
-            "sendy": { password: "206094", name: "Sendy" },
-            "cepi": { password: "215735", name: "Cepi" },
-            "ika": { password: "227746", name: "Ika" }
-        };
-
-        // --- Fungsi ---
         function setCurrentDateTime() {
             const datetimeInput = document.getElementById('datetime');
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-            const formattedDate = now.toLocaleDateString('id-ID', options).replace('pukul', ',');
-            datetimeInput.value = formattedDate;
+            datetimeInput.value = now.toLocaleDateString('id-ID', options).replace('pukul', ',');
         }
 
-        function resetAttendanceForm() {
-            // Hanya reset field selain nama karyawan
-            document.getElementById('department').value = "";
-            document.getElementById('shift').value = "";
-            document.getElementById('status').value = "";
-            setCurrentDateTime();
-            attendanceErrorMessage.classList.add('hidden');
-            requiredInputs.forEach(input => {
-                 if(input.id !== 'employee-name'){
-                    input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
-                 }
-            });
-        }
-
-        // --- Event Listener untuk Login ---
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault(); 
-            const usernameInput = document.getElementById('username').value.toLowerCase().trim();
-            const passwordInput = document.getElementById('password').value;
-
-            const user = employeeCredentials[usernameInput];
-
-            if (user && user.password === passwordInput) {
-                // Jika login berhasil
-                loginCard.classList.add('hidden');
-                attendanceCard.classList.remove('hidden');
-                loginErrorMessage.classList.add('hidden');
-                
-                // Secara otomatis memilih nama karyawan di form absensi dan membuatnya tidak bisa diubah
-                employeeNameSelect.value = user.name;
-                employeeNameSelect.setAttribute('disabled', 'disabled');
-
-            } else {
-                // Jika login gagal
-                loginErrorMessage.classList.remove('hidden');
-            }
-        });
-
-        // --- Event Listener untuk Form Absensi ---
         attendanceForm.addEventListener('submit', function(event) {
-            // Mengaktifkan kembali dropdown nama sebelum submit agar nilainya terkirim
-            employeeNameSelect.removeAttribute('disabled');
-
             let isFormValid = true;
             requiredInputs.forEach(input => {
                 input.classList.remove('border-red-500', 'ring-red-500');
@@ -288,8 +177,8 @@
             });
 
             if (isFormValid) {
-                attendanceErrorMessage.classList.add('hidden');
-                const employeeName = employeeNameSelect.value;
+                errorMessage.classList.add('hidden');
+                const employeeName = document.getElementById('employee-name').value;
                 successName.textContent = employeeName;
 
                 setTimeout(() => {
@@ -297,35 +186,32 @@
                     successCard.classList.remove('hidden');
                 }, 1000); 
             } else {
-                event.preventDefault(); 
-                attendanceErrorMessage.classList.remove('hidden');
+                event.preventDefault();
+                errorMessage.classList.remove('hidden');
             }
-             // Nonaktifkan lagi setelah submit untuk tampilan
-            employeeNameSelect.setAttribute('disabled', 'disabled');
         });
         
-        // --- Event Listener untuk Tombol Reset ---
-        resetButton.addEventListener('click', resetAttendanceForm);
-
-        // --- Event Listener untuk Tombol Logout (dari halaman sukses) ---
-        logoutButton.addEventListener('click', function() {
-            // Kembali ke halaman login
-            successCard.classList.add('hidden');
-            loginCard.classList.remove('hidden');
-            loginForm.reset(); // Kosongkan form login
-            
-            // Reset form absensi dan aktifkan kembali dropdown nama
-            resetAttendanceForm();
-            employeeNameSelect.value = "";
-            employeeNameSelect.removeAttribute('disabled');
+        resetButton.addEventListener('click', function() {
+            attendanceForm.reset();
+            setCurrentDateTime();
+            errorMessage.classList.add('hidden');
+            requiredInputs.forEach(input => {
+                input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+            });
         });
 
-        // --- Inisialisasi Saat Halaman Dimuat ---
+        backButton.addEventListener('click', function() {
+            attendanceForm.reset();
+            setCurrentDateTime();
+            successCard.classList.add('hidden');
+            attendanceCard.classList.remove('hidden');
+            requiredInputs.forEach(input => {
+                input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             setCurrentDateTime();
-            loginCard.classList.remove('hidden');
-            attendanceCard.classList.add('hidden');
-            successCard.classList.add('hidden');
         });
     </script>
 
