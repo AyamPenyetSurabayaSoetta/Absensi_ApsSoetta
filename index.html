@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Absensi Karyawan</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +41,7 @@
             <h1 class="text-3xl font-bold text-gray-800">Form Absensi Karyawan</h1>
             <p class="text-gray-500 mt-2">Silakan isi data kehadiran Anda hari ini.</p>
         </div>
-        
+
         <form id="attendance-form" class="space-y-6">
             <div>
                 <label for="datetime" class="block text-sm font-medium text-gray-700 mb-2">Tanggal & Waktu</label>
@@ -149,130 +149,140 @@
     </div>
 
     <script>
-        https://script.google.com/macros/s/AKfycbzg8CEX83xP0QlVjzh8jCeoQ_RzjIK-cQ58kgMVDlsvEYbfO_TR9h2vUXKETFxKmrN9/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMGPlFQwyaFNmQ4qYyjJMHRHHchPGwaPWxPxtieyOMH5g7MrhQsu9GQtkQXWu-S9db/exec";
 
-        // --- Elemen DOM ---
-        const attendanceCard = document.getElementById('attendance-card');
-        const successCard = document.getElementById('success-card');
-        const attendanceForm = document.getElementById('attendance-form');
-        const attendanceErrorMessage = document.getElementById('error-message');
-        const successName = document.getElementById('success-name');
-        const resetButton = document.getElementById('reset-button');
-        const backButton = document.getElementById('back-button');
-        const submitButton = document.getElementById('submit-button');
-        const submitText = document.getElementById('submit-text');
-        const submitSpinner = document.getElementById('submit-spinner');
-        const requiredInputs = attendanceForm.querySelectorAll('[required]');
-
-        // --- Fungsi ---
-        function setCurrentDateTime() {
-            const datetimeInput = document.getElementById('datetime');
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = (now.getMonth() + 1).toString().padStart(2, '0');
-            const day = now.getDate().toString().padStart(2, '0');
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            datetimeInput.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        }
-
-        function validateForm() {
-            let isValid = true;
-            attendanceErrorMessage.classList.add('hidden');
-            requiredInputs.forEach(input => {
-                input.classList.remove('border-red-500', 'ring-red-500');
-                if (!input.value) {
-                    isValid = false;
-                    input.classList.add('border-red-500', 'ring-1', 'ring-red-500');
-                }
-            });
-            if (!isValid) {
-                attendanceErrorMessage.textContent = 'Harap lengkapi semua kolom yang wajib diisi.';
-                attendanceErrorMessage.classList.remove('hidden');
-            }
-            return isValid;
-        }
-
-        function getLocation() {
-            return new Promise((resolve, reject) => {
-                if (!navigator.geolocation) {
-                    reject(new Error('Geolocation tidak didukung oleh browser ini.'));
-                    return;
-                }
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        // PERBAIKAN: Menggunakan toFixed(6) untuk memastikan 6 angka desimal
-                        document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
-                        document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
-                        resolve();
-                    },
-                    (error) => {
-                        let msg = '';
-                        switch(error.code) {
-                            case error.PERMISSION_DENIED: msg = "Anda harus mengizinkan akses lokasi untuk absen."; break;
-                            case error.POSITION_UNAVAILABLE: msg = "Informasi lokasi tidak tersedia."; break;
-                            case error.TIMEOUT: msg = "Waktu permintaan lokasi habis."; break;
-                            default: msg = "Terjadi kesalahan saat mengambil lokasi."; break;
-                        }
-                        reject(new Error(msg));
-                    }
-                );
-            });
-        }
-
-        // --- Event Listeners ---
-        attendanceForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            if (!validateForm()) return;
-
-            submitButton.disabled = true;
-            submitText.classList.add('hidden');
-            submitSpinner.classList.remove('hidden');
-            attendanceErrorMessage.classList.add('hidden');
-
-            try {
-                await getLocation();
-                const formData = new FormData(attendanceForm);
-                const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
-                const data = await response.json();
-
-                if (data.result === 'success') {
-                    successName.textContent = formData.get('nama_karyawan');
-                    attendanceCard.classList.add('hidden');
-                    successCard.classList.remove('hidden');
-                } else {
-                    throw new Error(data.message || 'Gagal mengirim data.');
-                }
-            } catch (error) {
-                attendanceErrorMessage.textContent = error.message;
-                attendanceErrorMessage.classList.remove('hidden');
-            } finally {
-                submitButton.disabled = false;
-                submitText.classList.remove('hidden');
-                submitSpinner.classList.add('hidden');
+    // --- Elemen DOM ---
+    const attendanceCard = document.getElementById('attendance-card');
+    const successCard = document.getElementById('success-card');
+    const attendanceForm = document.getElementById('attendance-form');
+    const attendanceErrorMessage = document.getElementById('error-message');
+    const successName = document.getElementById('success-name');
+    const resetButton = document.getElementById('reset-button');
+    const backButton = document.getElementById('back-button');
+    const submitButton = document.getElementById('submit-button');
+    const submitText = document.getElementById('submit-text');
+    const submitSpinner = document.getElementById('submit-spinner');
+    const requiredInputs = attendanceForm.querySelectorAll('[required]');
+    
+    // --- Fungsi ---
+    
+    // FUNGSI INI YANG MEMBUAT TANGGAL & WAKTU MUNCUL
+    function setCurrentDateTime() {
+        const datetimeInput = document.getElementById('datetime');
+        const now = new Date();
+        // Mengatur zona waktu ke WIB (GMT+7)
+        const offset = 7 * 60 * 60 * 1000;
+        const wibTime = new Date(now.getTime() + offset);
+        
+        const year = wibTime.getUTCFullYear();
+        const month = (wibTime.getUTCMonth() + 1).toString().padStart(2, '0');
+        const day = wibTime.getUTCDate().toString().padStart(2, '0');
+        const hours = wibTime.getUTCHours().toString().padStart(2, '0');
+        const minutes = wibTime.getUTCMinutes().toString().padStart(2, '0');
+        const seconds = wibTime.getUTCSeconds().toString().padStart(2, '0');
+        
+        datetimeInput.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+    
+    function validateForm() {
+        let isValid = true;
+        attendanceErrorMessage.classList.add('hidden');
+        requiredInputs.forEach(input => {
+            input.classList.remove('border-red-500', 'ring-red-500');
+            if (!input.value) {
+                isValid = false;
+                input.classList.add('border-red-500', 'ring-1', 'ring-red-500');
             }
         });
-
-        resetButton.addEventListener('click', () => {
-            attendanceForm.reset();
-            setCurrentDateTime();
-            attendanceErrorMessage.classList.add('hidden');
-            requiredInputs.forEach(input => {
-                input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
-            });
+        if (!isValid) {
+            attendanceErrorMessage.textContent = 'Harap lengkapi semua kolom yang wajib diisi.';
+            attendanceErrorMessage.classList.remove('hidden');
+        }
+        return isValid;
+    }
+    
+    function getLocation() {
+        return new Promise((resolve) => {
+            if (!navigator.geolocation) {
+                // Jangan tolak promise agar form tetap bisa dikirim tanpa lokasi
+                console.warn('Geolocation tidak didukung oleh browser ini.');
+                resolve();
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
+                    document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
+                    resolve();
+                },
+                (error) => {
+                    // Jangan tolak promise, cukup beri pesan di console
+                    console.warn(`Gagal mendapatkan lokasi: ${error.message}`);
+                    resolve(); // Tetap resolve agar proses submit lanjut
+                }
+            );
         });
-
-        backButton.addEventListener('click', function() {
-            successCard.classList.add('hidden');
-            attendanceCard.classList.remove('hidden');
-            attendanceForm.reset();
-            setCurrentDateTime();
+    }
+    
+    // --- Event Listeners ---
+    attendanceForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        if (!validateForm()) return;
+        
+        submitButton.disabled = true;
+        submitText.classList.add('hidden');
+        submitSpinner.classList.remove('hidden');
+        attendanceErrorMessage.classList.add('hidden');
+        
+        try {
+            await getLocation();
+            const formData = new FormData(attendanceForm);
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+            
+            // Cek jika respons tidak OK (misal, error server)
+            if (!response.ok) {
+                throw new Error(`Network response was not ok, status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.result === 'success') {
+                successName.textContent = formData.get('nama_karyawan');
+                attendanceCard.classList.add('hidden');
+                successCard.classList.remove('hidden');
+            } else {
+                throw new Error(data.message || 'Gagal mengirim data.');
+            }
+        } catch (error) {
+            console.error('Fetch Error:', error);
+            attendanceErrorMessage.textContent = `Gagal mengirim absensi. Cek koneksi internet Anda atau hubungi admin. (${error.message})`;
+            attendanceErrorMessage.classList.remove('hidden');
+        } finally {
+            submitButton.disabled = false;
+            submitText.classList.remove('hidden');
+            submitSpinner.classList.add('hidden');
+        }
+    });
+    
+    resetButton.addEventListener('click', () => {
+        attendanceForm.reset();
+        setCurrentDateTime();
+        attendanceErrorMessage.classList.add('hidden');
+        requiredInputs.forEach(input => {
+            input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
         });
-
-        document.addEventListener('DOMContentLoaded', setCurrentDateTime);
-    </script>
+    });
+    
+    backButton.addEventListener('click', function() {
+        successCard.classList.add('hidden');
+        attendanceCard.classList.remove('hidden');
+        attendanceForm.reset();
+        setCurrentDateTime();
+    });
+    
+    // BARIS INI YANG MEMANGGIL FUNGSI WAKTU SAAT HALAMAN DIBUKA
+    document.addEventListener('DOMContentLoaded', setCurrentDateTime);
+</script>
 
 </body>
 </html>
-
