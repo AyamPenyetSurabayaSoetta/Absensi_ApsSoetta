@@ -1,0 +1,21 @@
+{
+  "name": "Absensi Karyawan APS",
+  "short_name": "Absensi APS",
+  "description": "Aplikasi web untuk absensi karyawan Ayam Penyet Surabaya.",
+  "start_url": "../index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3B82F6",
+  "icons": [
+    {
+      "src": "web-app-manifest-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "web-app-manifest-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
