@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Absensi Karyawan</title>
 
+    <!-- Meta tag dan link untuk PWA, menunjuk ke folder 'favicon (1)' -->
+<meta name="theme-color" content="#3B82F6" />
+<link rel="manifest" href="favicon (1)/site.webmanifest">
+<link rel="apple-touch-icon" href="favicon (1)/apple-touch-icon.png">
+<link rel="icon" href="favicon (1)/favicon.ico" sizes="any">
+<link rel="icon" href="favicon (1)/favicon.svg" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -163,9 +169,9 @@
     const submitText = document.getElementById('submit-text');
     const submitSpinner = document.getElementById('submit-spinner');
     const requiredInputs = attendanceForm.querySelectorAll('[required]');
-    
+
     // --- Fungsi ---
-    
+
     // FUNGSI INI YANG MEMBUAT TANGGAL & WAKTU MUNCUL
     function setCurrentDateTime() {
         const datetimeInput = document.getElementById('datetime');
@@ -173,17 +179,17 @@
         // Mengatur zona waktu ke WIB (GMT+7)
         const offset = 7 * 60 * 60 * 1000;
         const wibTime = new Date(now.getTime() + offset);
-        
+
         const year = wibTime.getUTCFullYear();
         const month = (wibTime.getUTCMonth() + 1).toString().padStart(2, '0');
         const day = wibTime.getUTCDate().toString().padStart(2, '0');
         const hours = wibTime.getUTCHours().toString().padStart(2, '0');
         const minutes = wibTime.getUTCMinutes().toString().padStart(2, '0');
         const seconds = wibTime.getUTCSeconds().toString().padStart(2, '0');
-        
+
         datetimeInput.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
-    
+
     function validateForm() {
         let isValid = true;
         attendanceErrorMessage.classList.add('hidden');
@@ -200,7 +206,7 @@
         }
         return isValid;
     }
-    
+
     function getLocation() {
         return new Promise((resolve) => {
             if (!navigator.geolocation) {
@@ -223,29 +229,29 @@
             );
         });
     }
-    
+
     // --- Event Listeners ---
     attendanceForm.addEventListener('submit', async function(event) {
         event.preventDefault();
         if (!validateForm()) return;
-        
+
         submitButton.disabled = true;
         submitText.classList.add('hidden');
         submitSpinner.classList.remove('hidden');
         attendanceErrorMessage.classList.add('hidden');
-        
+
         try {
             await getLocation();
             const formData = new FormData(attendanceForm);
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
-            
+
             // Cek jika respons tidak OK (misal, error server)
             if (!response.ok) {
                 throw new Error(`Network response was not ok, status: ${response.status}`);
             }
-            
+
             const data = await response.json();
-            
+
             if (data.result === 'success') {
                 successName.textContent = formData.get('nama_karyawan');
                 attendanceCard.classList.add('hidden');
@@ -263,7 +269,7 @@
             submitSpinner.classList.add('hidden');
         }
     });
-    
+
     resetButton.addEventListener('click', () => {
         attendanceForm.reset();
         setCurrentDateTime();
@@ -272,14 +278,14 @@
             input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
         });
     });
-    
+
     backButton.addEventListener('click', function() {
         successCard.classList.add('hidden');
         attendanceCard.classList.remove('hidden');
         attendanceForm.reset();
         setCurrentDateTime();
     });
-    
+
     // BARIS INI YANG MEMANGGIL FUNGSI WAKTU SAAT HALAMAN DIBUKA
     document.addEventListener('DOMContentLoaded', setCurrentDateTime);
 </script>
